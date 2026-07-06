@@ -4,103 +4,176 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#f2f4f6" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#101013" media="(prefers-color-scheme: dark)">
 <title>ADsP 스터디</title>
 <style>
 :root{
-  --bg:#f7f6f3; --card:#ffffff; --ink:#1a1a1a; --sub:#6b6b6b; --line:#e4e2dd;
-  --accent:#4f46b8; --accent-bg:#eeedfe; --green:#0f6e56; --green-bg:#e1f5ee;
-  --red:#a32d2d; --red-bg:#fcebeb; --amber:#854f0b; --amber-bg:#faeeda;
+  --bg:#f2f4f6; --card:#ffffff; --ink:#191f28; --sub:#8b95a1; --sub2:#4e5968;
+  --line:#f2f4f6; --track:#e5e8eb;
+  --blue:#3182f6; --blue2:#5a9cf8; --blue-bg:#e8f1fe; --blue-ink:#1b64da;
+  --red:#f04452; --red-bg:#fdebec; --amber:#d18700; --amber-bg:#fef3d8;
+  --green:#0f9d58; --green-bg:#e2f5ea;
+  --sh-sm:0 2px 8px rgba(0,0,0,.05); --sh-md:0 10px 28px rgba(0,0,0,.10);
+  --sh-blue:0 6px 14px rgba(49,130,246,.4);
 }
 @media (prefers-color-scheme: dark){
   :root{
-    --bg:#191919; --card:#242424; --ink:#ececec; --sub:#9b9b9b; --line:#383838;
-    --accent:#afa9ec; --accent-bg:#2d2a4a; --green:#9fe1cb; --green-bg:#123a2e;
-    --red:#f09595; --red-bg:#3d1a1a; --amber:#fac775; --amber-bg:#3d2e12;
+    --bg:#101013; --card:#1c1e22; --ink:#f2f3f5; --sub:#8f96a3; --sub2:#aeb4bf;
+    --line:#2a2d33; --track:#2a2d33;
+    --blue:#4a90f7; --blue2:#6da8f9; --blue-bg:#1d2b45; --blue-ink:#8ab8fa;
+    --red:#ff6b76; --red-bg:#33191c; --amber:#ffc75e; --amber-bg:#332a14;
+    --green:#4ecb8d; --green-bg:#14301f;
+    --sh-sm:0 2px 8px rgba(0,0,0,.3); --sh-md:0 10px 28px rgba(0,0,0,.45);
+    --sh-blue:0 6px 14px rgba(49,130,246,.25);
   }
 }
 *{box-sizing:border-box; -webkit-tap-highlight-color:transparent}
-body{margin:0; background:var(--bg); color:var(--ink);
+html,body{margin:0}
+body{background:var(--bg); color:var(--ink);
   font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Noto Sans KR",sans-serif;
-  font-size:16px; line-height:1.6}
-.wrap{max-width:520px; margin:0 auto; padding:16px 16px 90px}
-header{display:flex; justify-content:space-between; align-items:baseline; padding:8px 2px 14px}
-header h1{font-size:19px; font-weight:700; margin:0}
-header span{font-size:12px; color:var(--sub)}
-.tabs{position:fixed; bottom:0; left:0; right:0; background:var(--card);
-  border-top:1px solid var(--line); display:flex; z-index:10;
-  padding-bottom:env(safe-area-inset-bottom)}
-.tabs button{flex:1; border:none; background:none; padding:12px 0 10px; font-size:13px;
-  color:var(--sub); cursor:pointer; font-family:inherit}
-.tabs button.on{color:var(--accent); font-weight:700}
-.tabs button .ic{display:block; font-size:18px; margin-bottom:2px}
-.view{display:none}
+  font-size:16px; line-height:1.6; letter-spacing:-.2px}
+.wrap{max-width:480px; margin:0 auto; padding:20px 20px 96px}
+.view{display:none; animation:fade .25s ease}
 .view.on{display:block}
-.pill{display:inline-block; font-size:12px; padding:3px 10px; border-radius:99px;
-  border:1px solid var(--line); background:var(--card); color:var(--sub); cursor:pointer}
-.pill.on{background:var(--ink); color:var(--bg); border-color:var(--ink)}
-.search{width:100%; padding:10px 14px; border-radius:10px; border:1px solid var(--line);
-  background:var(--card); color:var(--ink); font-size:15px; font-family:inherit; margin:10px 0}
-.search:focus{outline:2px solid var(--accent)}
-.concept{background:var(--card); border:1px solid var(--line); border-radius:12px;
-  padding:13px 15px; margin-bottom:9px; cursor:pointer}
-.concept h3{margin:0; font-size:15px; font-weight:700; display:flex; justify-content:space-between; gap:8px}
-.concept h3 em{font-style:normal; color:var(--sub); font-size:12px; font-weight:400; flex-shrink:0}
-.concept .body{display:none; margin-top:9px; padding-top:9px; border-top:1px solid var(--line);
-  font-size:14px; color:var(--ink)}
+@keyframes fade{from{opacity:0; transform:translateY(6px)} to{opacity:1; transform:none}}
+.tabs{position:fixed; bottom:0; left:0; right:0; z-index:10;
+  background:color-mix(in srgb, var(--card) 88%, transparent);
+  -webkit-backdrop-filter:blur(16px); backdrop-filter:blur(16px);
+  border-top:1px solid var(--line); display:flex;
+  padding-bottom:env(safe-area-inset-bottom)}
+.tabs button{flex:1; border:none; background:none; padding:10px 0 8px; font-size:11px;
+  color:var(--sub); cursor:pointer; font-family:inherit; font-weight:600; letter-spacing:-.2px}
+.tabs button.on{color:var(--blue)}
+.tabs button .ic{display:block; font-size:20px; margin-bottom:1px}
+h1{font-size:22px; font-weight:700; margin:0 0 16px; letter-spacing:-.5px}
+.date{font-size:13px; color:var(--sub); margin:2px 0 2px}
+.hero{background:linear-gradient(135deg,var(--blue),var(--blue2)); border-radius:22px;
+  padding:22px 20px; color:#fff; box-shadow:0 8px 20px rgba(49,130,246,.35); margin-bottom:14px;
+  cursor:pointer; transition:transform .15s}
+.hero:active{transform:scale(.98)}
+.hero .l{font-size:13px; opacity:.85; margin:0 0 2px}
+.hero .n{font-size:36px; font-weight:700; letter-spacing:-1.5px; margin:0}
+.hero .n small{font-size:15px; font-weight:500; opacity:.85; letter-spacing:0}
+.hero .bar{height:6px; background:rgba(255,255,255,.3); border-radius:99px; margin-top:14px; overflow:hidden}
+.hero .bar i{display:block; height:100%; background:#fff; border-radius:99px; transition:width .4s}
+.hero .m{font-size:12px; opacity:.9; margin:8px 0 0}
+.hero .cta{display:inline-block; margin-top:14px; background:#fff; color:var(--blue-ink);
+  font-size:14px; font-weight:700; padding:10px 20px; border-radius:12px}
+.cards3{display:flex; gap:10px; margin-bottom:14px}
+.mini{flex:1; background:var(--card); border-radius:16px; padding:13px 14px; box-shadow:var(--sh-sm)}
+.mini .l{font-size:12px; color:var(--sub); margin:0}
+.mini .n{font-size:19px; font-weight:700; margin:2px 0 0; letter-spacing:-.5px}
+.mini .n small{font-size:12px; color:var(--sub); font-weight:400}
+.section{background:var(--card); border-radius:18px; padding:6px 16px; box-shadow:var(--sh-sm)}
+.row{display:flex; justify-content:space-between; align-items:center; padding:13px 0;
+  border-bottom:1px solid var(--line); font-size:14px; font-weight:500}
+.row:last-child{border-bottom:none}
+.row .r{color:var(--sub); font-size:13px; font-weight:400}
+.seg{background:var(--card); border-radius:14px; padding:4px; display:flex; box-shadow:var(--sh-sm); margin-bottom:14px}
+.seg span{flex:1; text-align:center; padding:8px 0; border-radius:10px; font-size:13px;
+  color:var(--sub); cursor:pointer; font-weight:600; transition:all .15s}
+.seg span.on{background:var(--ink); color:var(--bg)}
+.search{width:100%; padding:13px 16px; border-radius:14px; border:none; box-shadow:var(--sh-sm);
+  background:var(--card); color:var(--ink); font-size:15px; font-family:inherit; margin-bottom:12px;
+  outline:none; letter-spacing:-.2px}
+.search::placeholder{color:var(--sub)}
+.concept{background:var(--card); border-radius:16px; padding:15px 17px; margin-bottom:10px;
+  cursor:pointer; box-shadow:var(--sh-sm); transition:transform .12s}
+.concept:active{transform:scale(.985)}
+.concept h3{margin:0; font-size:15px; font-weight:700; display:flex; justify-content:space-between; gap:8px; letter-spacing:-.3px}
+.concept h3 em{font-style:normal; color:var(--sub); font-size:11px; font-weight:500; flex-shrink:0;
+  background:var(--bg); padding:2px 8px; border-radius:99px; align-self:flex-start}
+.concept .body{display:none; margin-top:10px; padding-top:10px; border-top:1px solid var(--line);
+  font-size:14px; color:var(--sub2)}
 .concept.open .body{display:block}
-.body ul{margin:4px 0; padding-left:18px}
+.body ul,.body ol{margin:4px 0; padding-left:18px}
 .body li{margin:3px 0}
-.body b{color:var(--accent)}
-.statgrid{display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:14px}
-.stat{background:var(--card); border:1px solid var(--line); border-radius:10px; padding:10px; text-align:center}
-.stat .n{font-size:20px; font-weight:700}
-.stat .l{font-size:11px; color:var(--sub)}
-.fcard{background:var(--card); border:1px solid var(--line); border-radius:16px;
-  min-height:280px; padding:24px 20px; display:flex; flex-direction:column;
-  justify-content:center; text-align:center; cursor:pointer; margin-bottom:14px}
-.fcard .tag{font-size:12px; color:var(--sub); margin-bottom:12px}
-.fcard .front{font-size:21px; font-weight:700}
-.fcard .back{display:none; text-align:left; font-size:15px; margin-top:16px;
+.body b{color:var(--blue)}
+.ftop{display:flex; align-items:center; gap:12px; margin-bottom:18px}
+.ftop .bar{flex:1; height:6px; background:var(--track); border-radius:99px; overflow:hidden}
+.ftop .bar i{display:block; height:100%; background:var(--blue); border-radius:99px; transition:width .3s}
+.ftop .c{font-size:13px; color:var(--sub); font-weight:600}
+.stack{position:relative; margin-bottom:18px; perspective:1200px}
+.stack .ghost{position:absolute; left:8px; right:8px; top:6px; bottom:-6px; background:var(--card);
+  border-radius:22px; opacity:.55; box-shadow:var(--sh-sm)}
+.stack .ghost.g2{left:16px; right:16px; top:12px; bottom:-12px; opacity:.3}
+.fcard{position:relative; background:var(--card); border-radius:22px; min-height:300px;
+  padding:26px 22px; display:flex; flex-direction:column; justify-content:center; text-align:center;
+  cursor:pointer; box-shadow:var(--sh-md); transition:transform .35s cubic-bezier(.2,.7,.3,1.1)}
+.fcard.flip{animation:flipin .4s ease}
+@keyframes flipin{0%{transform:rotateY(85deg); opacity:.3} 100%{transform:none; opacity:1}}
+.fcard .tag{font-size:11px; background:var(--blue-bg); color:var(--blue-ink); padding:4px 12px;
+  border-radius:99px; font-weight:600; align-self:center; margin-bottom:14px}
+.fcard .front{font-size:21px; font-weight:700; letter-spacing:-.5px}
+.fcard .back{display:none; text-align:left; font-size:15px; margin-top:16px; color:var(--sub2);
   padding-top:16px; border-top:1px solid var(--line)}
 .fcard.flip .back{display:block}
 .fcard.flip .front{font-size:16px}
-.hint{text-align:center; font-size:13px; color:var(--sub); margin-bottom:14px}
+.hint{text-align:center; font-size:13px; color:var(--sub); margin-bottom:16px}
 .grade{display:none; gap:8px}
-.grade.on{display:flex}
-.grade button{flex:1; padding:13px 0; border-radius:12px; border:none; font-size:15px;
-  font-weight:700; cursor:pointer; font-family:inherit}
-.g-no{background:var(--red-bg); color:var(--red)}
-.g-mid{background:var(--amber-bg); color:var(--amber)}
-.g-yes{background:var(--green-bg); color:var(--green)}
-.done{background:var(--card); border:1px solid var(--line); border-radius:16px;
-  padding:40px 20px; text-align:center}
-.done .big{font-size:34px; margin-bottom:8px}
-.btn{display:inline-block; margin-top:14px; padding:11px 22px; border-radius:10px;
+.grade.on{display:flex; animation:fade .25s ease}
+.grade button{flex:1; padding:15px 0; border-radius:16px; border:none; font-size:15px;
+  font-weight:700; cursor:pointer; font-family:inherit; letter-spacing:-.3px; transition:transform .12s}
+.grade button:active{transform:scale(.95)}
+.g-no{background:var(--card); color:var(--red); box-shadow:var(--sh-sm)}
+.g-mid{background:var(--card); color:var(--sub); box-shadow:var(--sh-sm)}
+.g-yes{background:var(--blue); color:#fff; box-shadow:var(--sh-blue)}
+.done{background:var(--card); border-radius:22px; padding:44px 20px; text-align:center; box-shadow:var(--sh-md)}
+.done .big{font-size:40px; margin-bottom:10px}
+.btn{display:inline-block; margin-top:16px; padding:13px 26px; border-radius:14px;
   border:none; background:var(--ink); color:var(--bg); font-size:15px; font-weight:700;
-  cursor:pointer; font-family:inherit}
-.qbox{background:var(--card); border:1px solid var(--line); border-radius:16px; padding:20px; margin-bottom:12px}
-.qbox .qn{font-size:12px; color:var(--sub); margin-bottom:8px}
-.qbox .qt{font-size:15px; margin-bottom:16px}
-.qbox .qt ul{margin:6px 0; padding-left:18px}
-.opt{display:block; width:100%; text-align:left; padding:12px 14px; margin-bottom:8px;
-  border-radius:10px; border:1px solid var(--line); background:var(--bg); color:var(--ink);
-  font-size:15px; cursor:pointer; font-family:inherit}
-.opt.correct{background:var(--green-bg); color:var(--green); border-color:var(--green); font-weight:700}
-.opt.wrong{background:var(--red-bg); color:var(--red); border-color:var(--red)}
-.prog{height:5px; background:var(--line); border-radius:99px; margin-bottom:14px; overflow:hidden}
-.prog i{display:block; height:100%; background:var(--accent); border-radius:99px; transition:width .2s}
+  cursor:pointer; font-family:inherit; letter-spacing:-.3px}
+.qbox{background:var(--card); border-radius:22px; padding:22px 20px; box-shadow:var(--sh-md)}
+.qbox .qn{font-size:12px; color:var(--sub); margin-bottom:8px; font-weight:600}
+.qbox .qt{font-size:15px; margin-bottom:16px; font-weight:600}
+.qdesc{margin-top:10px; padding:14px; background:var(--bg); border-radius:14px; font-size:14px;
+  font-weight:400; color:var(--sub2)}
+.qdesc ul,.qdesc ol{margin:4px 0; padding-left:18px}
+.qdesc b{color:var(--blue)}
+.opt{display:block; width:100%; text-align:left; padding:14px 16px; margin-bottom:9px;
+  border-radius:14px; border:none; background:var(--bg); color:var(--ink);
+  font-size:15px; cursor:pointer; font-family:inherit; font-weight:500; letter-spacing:-.2px;
+  transition:transform .12s}
+.opt:active{transform:scale(.98)}
+.opt.correct{background:var(--green-bg); color:var(--green); font-weight:700}
+.opt.wrong{background:var(--red-bg); color:var(--red)}
 </style>
 </head>
 <body>
 <div class="wrap">
-<header><h1>⚓ ADsP 스터디</h1><span id="hdr"></span></header>
+
+<!-- 홈 -->
+<section class="view on" id="v-home">
+  <p class="date" id="dt"></p>
+  <h1>오늘의 학습</h1>
+  <div class="hero" id="hero">
+    <p class="l">복습할 카드</p>
+    <p class="n"><span id="h-due">0</span><small> 장</small></p>
+    <div class="bar"><i id="h-bar" style="width:0%"></i></div>
+    <p class="m"><span id="h-pct">0</span>% 학습 진행 · 🔥 <span id="h-streak">0</span>일 연속</p>
+    <span class="cta">복습 시작하기</span>
+  </div>
+  <div class="cards3">
+    <div class="mini"><p class="l">1과목</p><p class="n" id="m-s1">0<small>개</small></p></div>
+    <div class="mini"><p class="l">2과목</p><p class="n" id="m-s2">0<small>개</small></p></div>
+    <div class="mini"><p class="l">마스터</p><p class="n" style="color:var(--blue)" id="m-master">0<small>개</small></p></div>
+  </div>
+  <div class="section">
+    <div class="row"><span>새 카드</span><span class="r" id="r-new">0개</span></div>
+    <div class="row"><span>학습 중 (Box 1~3)</span><span class="r" id="r-mid">0개</span></div>
+    <div class="row"><span>마스터 (Box 4~5)</span><span class="r" id="r-done">0개</span></div>
+  </div>
+</section>
 
 <!-- 개념 리뷰 -->
-<section class="view on" id="v-review">
-  <div id="filters">
-    <span class="pill on" data-s="0">전체</span>
-    <span class="pill" data-s="1">1과목</span>
-    <span class="pill" data-s="2">2과목</span>
+<section class="view" id="v-review">
+  <h1>개념 리뷰</h1>
+  <div class="seg" id="filters">
+    <span class="on" data-s="0">전체</span>
+    <span data-s="1">1과목</span>
+    <span data-s="2">2과목</span>
   </div>
   <input class="search" id="q" type="search" placeholder="검색 (예: DIKW, 트랜잭션)">
   <div id="list"></div>
@@ -108,23 +181,20 @@ header span{font-size:12px; color:var(--sub)}
 
 <!-- 플래시카드 -->
 <section class="view" id="v-flash">
-  <div class="statgrid">
-    <div class="stat"><div class="n" id="s-due">0</div><div class="l">오늘 복습</div></div>
-    <div class="stat"><div class="n" id="s-new">0</div><div class="l">새 카드</div></div>
-    <div class="stat"><div class="n" id="s-done">0</div><div class="l">마스터(Box4+)</div></div>
-  </div>
   <div id="flash-area"></div>
 </section>
 
 <!-- 퀴즈 -->
 <section class="view" id="v-quiz">
+  <h1>퀴즈</h1>
   <div id="quiz-area"></div>
 </section>
 </div>
 
 <div class="tabs">
-  <button class="on" data-v="review"><span class="ic">📖</span>개념 리뷰</button>
-  <button data-v="flash"><span class="ic">🃏</span>플래시카드</button>
+  <button class="on" data-v="home"><span class="ic">🏠</span>홈</button>
+  <button data-v="review"><span class="ic">📖</span>개념</button>
+  <button data-v="flash"><span class="ic">🃏</span>카드</button>
   <button data-v="quiz"><span class="ic">✅</span>퀴즈</button>
 </div>
 
@@ -170,30 +240,63 @@ const DATA = [
 {id:"d38", s:2, t:"지도 학습", b:"정답(레이블)이 있는 데이터를 활용하여 분석 모델을 학습"}
 ];
 
-const LS = "adsp-srs-v1";
+const LS = "adsp-srs-v1", LS2 = "adsp-meta-v1";
 const state = JSON.parse(localStorage.getItem(LS) || "{}");
+const meta = JSON.parse(localStorage.getItem(LS2) || '{"streak":0,"last":""}');
 const save = () => localStorage.setItem(LS, JSON.stringify(state));
+const saveMeta = () => localStorage.setItem(LS2, JSON.stringify(meta));
 const today = () => new Date().toISOString().slice(0,10);
 const addDays = d => { const t = new Date(); t.setDate(t.getDate()+d); return t.toISOString().slice(0,10); };
 const INTERVAL = {1:1, 2:2, 3:4, 4:7, 5:15};
 const get = id => state[id] || {box:0, due:today()};
 
-document.getElementById("hdr").textContent = "총 " + DATA.length + "개 개념";
+function touchStreak(){
+  const t = today();
+  if (meta.last === t) return;
+  const y = new Date(); y.setDate(y.getDate()-1);
+  meta.streak = (meta.last === y.toISOString().slice(0,10)) ? meta.streak + 1 : 1;
+  meta.last = t; saveMeta();
+}
 
-// 탭
-document.querySelectorAll(".tabs button").forEach(b => b.onclick = () => {
-  document.querySelectorAll(".tabs button").forEach(x => x.classList.remove("on"));
+// ---------- 홈 ----------
+const DAYS = ["일","월","화","수","목","금","토"];
+function renderHome(){
+  const now = new Date();
+  document.getElementById("dt").textContent = `${now.getMonth()+1}월 ${now.getDate()}일 ${DAYS[now.getDay()]}요일`;
+  const due = DATA.filter(c => get(c.id).due <= today()).length;
+  const master = DATA.filter(c => get(c.id).box >= 4).length;
+  const learning = DATA.filter(c => { const b = get(c.id).box; return b >= 1 && b <= 3; }).length;
+  const fresh = DATA.filter(c => get(c.id).box === 0).length;
+  const pct = Math.round(DATA.reduce((a,c) => a + get(c.id).box, 0) / (DATA.length * 5) * 100);
+  document.getElementById("h-due").textContent = due;
+  document.getElementById("h-bar").style.width = pct + "%";
+  document.getElementById("h-pct").textContent = pct;
+  document.getElementById("h-streak").textContent = meta.streak;
+  document.getElementById("m-s1").innerHTML = DATA.filter(c => c.s === 1).length + "<small>개</small>";
+  document.getElementById("m-s2").innerHTML = DATA.filter(c => c.s === 2).length + "<small>개</small>";
+  document.getElementById("m-master").innerHTML = master + "<small>개</small>";
+  document.getElementById("r-new").textContent = fresh + "개";
+  document.getElementById("r-mid").textContent = learning + "개";
+  document.getElementById("r-done").textContent = master + "개";
+}
+document.getElementById("hero").onclick = () => switchTab("flash");
+renderHome();
+
+// ---------- 탭 ----------
+function switchTab(v){
+  document.querySelectorAll(".tabs button").forEach(x => x.classList.toggle("on", x.dataset.v === v));
   document.querySelectorAll(".view").forEach(x => x.classList.remove("on"));
-  b.classList.add("on");
-  document.getElementById("v-" + b.dataset.v).classList.add("on");
-  if (b.dataset.v === "flash") initFlash();
-  if (b.dataset.v === "quiz") initQuiz();
-});
+  document.getElementById("v-" + v).classList.add("on");
+  if (v === "home") renderHome();
+  if (v === "flash") initFlash();
+  if (v === "quiz") initQuiz();
+}
+document.querySelectorAll(".tabs button").forEach(b => b.onclick = () => switchTab(b.dataset.v));
 
 // ---------- 개념 리뷰 ----------
 let subj = 0;
-document.querySelectorAll("#filters .pill").forEach(p => p.onclick = () => {
-  document.querySelectorAll("#filters .pill").forEach(x => x.classList.remove("on"));
+document.querySelectorAll("#filters span").forEach(p => p.onclick = () => {
+  document.querySelectorAll("#filters span").forEach(x => x.classList.remove("on"));
   p.classList.add("on"); subj = +p.dataset.s; renderList();
 });
 document.getElementById("q").oninput = renderList;
@@ -210,40 +313,43 @@ function renderList(){
     d.onclick = () => d.classList.toggle("open");
     el.appendChild(d);
   });
-  if (!el.children.length) el.innerHTML = '<p style="text-align:center;color:var(--sub)">검색 결과 없음</p>';
+  if (!el.children.length) el.innerHTML = '<p style="text-align:center;color:var(--sub);font-size:14px">검색 결과 없음</p>';
 }
 renderList();
 
 // ---------- 플래시카드 (라이트너 SRS) ----------
-let queue = [], cur = null;
+let queue = [], cur = null, total = 0;
 function dueCards(){ return DATA.filter(c => get(c.id).due <= today()); }
-function updateStats(){
-  document.getElementById("s-due").textContent = dueCards().length;
-  document.getElementById("s-new").textContent = DATA.filter(c => get(c.id).box === 0).length;
-  document.getElementById("s-done").textContent = DATA.filter(c => get(c.id).box >= 4).length;
-}
 function initFlash(){
-  updateStats();
   queue = dueCards().sort((a,b) => get(a.id).box - get(b.id).box || Math.random()-0.5);
+  total = queue.length;
   nextCard();
 }
 function nextCard(){
   const area = document.getElementById("flash-area");
-  updateStats();
   if (!queue.length){
-    area.innerHTML = `<div class="done"><div class="big">🎉</div><p style="margin:0">오늘 복습 끝!<br><span style="font-size:13px;color:var(--sub)">내일 다시 확인해봐요. 미리 더 볼 수도 있어요.</span></p><button class="btn" id="more">전체 카드 한 번 더 돌기</button></div>`;
+    area.innerHTML = `<div class="done"><div class="big">🎉</div><p style="margin:0;font-weight:700;font-size:18px">오늘 복습 끝!</p><p style="font-size:13px;color:var(--sub);margin:6px 0 0">🔥 ${meta.streak}일 연속 학습 중. 내일 또 만나요.</p><button class="btn" id="more">전체 카드 한 번 더 돌기</button></div>`;
     document.getElementById("more").onclick = () => {
-      queue = [...DATA].sort(() => Math.random()-0.5); nextCard();
+      queue = [...DATA].sort(() => Math.random()-0.5); total = queue.length; nextCard();
     };
     return;
   }
   cur = queue.shift();
   const st = get(cur.id);
+  const done = total - queue.length;
   area.innerHTML = `
-    <div class="fcard" id="fc">
-      <div class="tag">${cur.s}과목 · Box ${st.box} · 남은 카드 ${queue.length + 1}</div>
-      <div class="front">${cur.t}</div>
-      <div class="back">${cur.b}</div>
+    <div class="ftop">
+      <div class="bar"><i style="width:${Math.round(done/Math.max(total,1)*100)}%"></i></div>
+      <span class="c">${done}/${total}</span>
+    </div>
+    <div class="stack">
+      <div class="ghost g2"></div>
+      <div class="ghost"></div>
+      <div class="fcard" id="fc">
+        <span class="tag">${cur.s}과목 · Box ${st.box}</span>
+        <div class="front">${cur.t}</div>
+        <div class="back">${cur.b}</div>
+      </div>
     </div>
     <p class="hint" id="fh">카드를 탭해서 답 확인</p>
     <div class="grade" id="gr">
@@ -253,20 +359,29 @@ function nextCard(){
     </div>`;
   const fc = document.getElementById("fc");
   fc.onclick = () => {
+    if (fc.classList.contains("flip")) return;
     fc.classList.add("flip");
     document.getElementById("gr").classList.add("on");
     document.getElementById("fh").style.display = "none";
   };
+  let sx = 0;
+  fc.addEventListener("touchstart", e => { sx = e.touches[0].clientX; }, {passive:true});
+  fc.addEventListener("touchend", e => {
+    if (!fc.classList.contains("flip")) return;
+    const dx = e.changedTouches[0].clientX - sx;
+    if (dx > 70) grade(2);
+    else if (dx < -70) grade(0);
+  }, {passive:true});
   document.querySelector(".g-no").onclick = () => grade(0);
   document.querySelector(".g-mid").onclick = () => grade(1);
   document.querySelector(".g-yes").onclick = () => grade(2);
 }
 function grade(g){
   const st = get(cur.id);
-  if (g === 0){ st.box = 1; st.due = today(); queue.push(cur); }
+  if (g === 0){ st.box = 1; st.due = today(); queue.push(cur); total++; }
   else if (g === 1){ st.box = Math.max(1, st.box); st.due = addDays(1); }
   else { st.box = Math.min(5, st.box + 1); st.due = addDays(INTERVAL[st.box]); }
-  state[cur.id] = st; save(); nextCard();
+  state[cur.id] = st; save(); touchStreak(); nextCard();
 }
 
 // ---------- 퀴즈 ----------
@@ -278,17 +393,20 @@ function initQuiz(){
 function renderQuiz(){
   const area = document.getElementById("quiz-area");
   if (qi >= qz.length){
-    area.innerHTML = `<div class="done"><div class="big">${qscore >= 8 ? "🏆" : qscore >= 5 ? "👍" : "💪"}</div><p style="margin:0;font-size:20px;font-weight:700">${qscore} / ${qz.length}</p><p style="font-size:13px;color:var(--sub)">${qscore >= 8 ? "합격권이에요!" : "틀린 개념은 플래시카드로 복습!"}</p><button class="btn" onclick="initQuiz()">다시 풀기</button></div>`;
+    area.innerHTML = `<div class="done"><div class="big">${qscore >= 8 ? "🏆" : qscore >= 5 ? "👍" : "💪"}</div><p style="margin:0;font-size:26px;font-weight:700">${qscore} / ${qz.length}</p><p style="font-size:13px;color:var(--sub);margin:6px 0 0">${qscore >= 8 ? "합격권이에요!" : "틀린 개념은 플래시카드로 복습!"}</p><button class="btn" onclick="initQuiz()">다시 풀기</button></div>`;
     return;
   }
   const c = qz[qi];
   const wrongs = DATA.filter(x => x.id !== c.id && x.s === c.s).sort(() => Math.random()-0.5).slice(0,3);
   const opts = [c, ...wrongs].sort(() => Math.random()-0.5);
   area.innerHTML = `
-    <div class="prog"><i style="width:${qi/qz.length*100}%"></i></div>
+    <div class="ftop">
+      <div class="bar"><i style="width:${qi/qz.length*100}%"></i></div>
+      <span class="c">${qi+1}/${qz.length}</span>
+    </div>
     <div class="qbox">
-      <div class="qn">${qi+1} / ${qz.length} · ${c.s}과목</div>
-      <div class="qt">다음 설명에 해당하는 개념은?<div style="margin-top:10px;padding:12px;background:var(--bg);border-radius:10px;font-size:14px">${c.b}</div></div>
+      <div class="qn">${c.s}과목</div>
+      <div class="qt">다음 설명에 해당하는 개념은?<div class="qdesc">${c.b}</div></div>
       ${opts.map(o => `<button class="opt" data-id="${o.id}">${o.t}</button>`).join("")}
     </div>`;
   document.querySelectorAll(".opt").forEach(btn => btn.onclick = () => {
