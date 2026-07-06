@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>ADsP 스터디</title>
+<style>
+:root{
+  --bg:#f7f6f3; --card:#ffffff; --ink:#1a1a1a; --sub:#6b6b6b; --line:#e4e2dd;
+  --accent:#4f46b8; --accent-bg:#eeedfe; --green:#0f6e56; --green-bg:#e1f5ee;
+  --red:#a32d2d; --red-bg:#fcebeb; --amber:#854f0b; --amber-bg:#faeeda;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#191919; --card:#242424; --ink:#ececec; --sub:#9b9b9b; --line:#383838;
+    --accent:#afa9ec; --accent-bg:#2d2a4a; --green:#9fe1cb; --green-bg:#123a2e;
+    --red:#f09595; --red-bg:#3d1a1a; --amber:#fac775; --amber-bg:#3d2e12;
+  }
+}
+*{box-sizing:border-box; -webkit-tap-highlight-color:transparent}
+body{margin:0; background:var(--bg); color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Noto Sans KR",sans-serif;
+  font-size:16px; line-height:1.6}
+.wrap{max-width:520px; margin:0 auto; padding:16px 16px 90px}
+header{display:flex; justify-content:space-between; align-items:baseline; padding:8px 2px 14px}
+header h1{font-size:19px; font-weight:700; margin:0}
+header span{font-size:12px; color:var(--sub)}
+.tabs{position:fixed; bottom:0; left:0; right:0; background:var(--card);
+  border-top:1px solid var(--line); display:flex; z-index:10;
+  padding-bottom:env(safe-area-inset-bottom)}
+.tabs button{flex:1; border:none; background:none; padding:12px 0 10px; font-size:13px;
+  color:var(--sub); cursor:pointer; font-family:inherit}
+.tabs button.on{color:var(--accent); font-weight:700}
+.tabs button .ic{display:block; font-size:18px; margin-bottom:2px}
+.view{display:none}
+.view.on{display:block}
+.pill{display:inline-block; font-size:12px; padding:3px 10px; border-radius:99px;
+  border:1px solid var(--line); background:var(--card); color:var(--sub); cursor:pointer}
+.pill.on{background:var(--ink); color:var(--bg); border-color:var(--ink)}
+.search{width:100%; padding:10px 14px; border-radius:10px; border:1px solid var(--line);
+  background:var(--card); color:var(--ink); font-size:15px; font-family:inherit; margin:10px 0}
+.search:focus{outline:2px solid var(--accent)}
+.concept{background:var(--card); border:1px solid var(--line); border-radius:12px;
+  padding:13px 15px; margin-bottom:9px; cursor:pointer}
+.concept h3{margin:0; font-size:15px; font-weight:700; display:flex; justify-content:space-between; gap:8px}
+.concept h3 em{font-style:normal; color:var(--sub); font-size:12px; font-weight:400; flex-shrink:0}
+.concept .body{display:none; margin-top:9px; padding-top:9px; border-top:1px solid var(--line);
+  font-size:14px; color:var(--ink)}
+.concept.open .body{display:block}
+.body ul{margin:4px 0; padding-left:18px}
+.body li{margin:3px 0}
+.body b{color:var(--accent)}
+.statgrid{display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:14px}
+.stat{background:var(--card); border:1px solid var(--line); border-radius:10px; padding:10px; text-align:center}
+.stat .n{font-size:20px; font-weight:700}
+.stat .l{font-size:11px; color:var(--sub)}
+.fcard{background:var(--card); border:1px solid var(--line); border-radius:16px;
+  min-height:280px; padding:24px 20px; display:flex; flex-direction:column;
+  justify-content:center; text-align:center; cursor:pointer; margin-bottom:14px}
+.fcard .tag{font-size:12px; color:var(--sub); margin-bottom:12px}
+.fcard .front{font-size:21px; font-weight:700}
+.fcard .back{display:none; text-align:left; font-size:15px; margin-top:16px;
+  padding-top:16px; border-top:1px solid var(--line)}
+.fcard.flip .back{display:block}
+.fcard.flip .front{font-size:16px}
+.hint{text-align:center; font-size:13px; color:var(--sub); margin-bottom:14px}
+.grade{display:none; gap:8px}
+.grade.on{display:flex}
+.grade button{flex:1; padding:13px 0; border-radius:12px; border:none; font-size:15px;
+  font-weight:700; cursor:pointer; font-family:inherit}
+.g-no{background:var(--red-bg); color:var(--red)}
+.g-mid{background:var(--amber-bg); color:var(--amber)}
+.g-yes{background:var(--green-bg); color:var(--green)}
+.done{background:var(--card); border:1px solid var(--line); border-radius:16px;
+  padding:40px 20px; text-align:center}
+.done .big{font-size:34px; margin-bottom:8px}
+.btn{display:inline-block; margin-top:14px; padding:11px 22px; border-radius:10px;
+  border:none; background:var(--ink); color:var(--bg); font-size:15px; font-weight:700;
+  cursor:pointer; font-family:inherit}
+.qbox{background:var(--card); border:1px solid var(--line); border-radius:16px; padding:20px; margin-bottom:12px}
+.qbox .qn{font-size:12px; color:var(--sub); margin-bottom:8px}
+.qbox .qt{font-size:15px; margin-bottom:16px}
+.qbox .qt ul{margin:6px 0; padding-left:18px}
+.opt{display:block; width:100%; text-align:left; padding:12px 14px; margin-bottom:8px;
+  border-radius:10px; border:1px solid var(--line); background:var(--bg); color:var(--ink);
+  font-size:15px; cursor:pointer; font-family:inherit}
+.opt.correct{background:var(--green-bg); color:var(--green); border-color:var(--green); font-weight:700}
+.opt.wrong{background:var(--red-bg); color:var(--red); border-color:var(--red)}
+.prog{height:5px; background:var(--line); border-radius:99px; margin-bottom:14px; overflow:hidden}
+.prog i{display:block; height:100%; background:var(--accent); border-radius:99px; transition:width .2s}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header><h1>⚓ ADsP 스터디</h1><span id="hdr"></span></header>
+
+<!-- 개념 리뷰 -->
+<section class="view on" id="v-review">
+  <div id="filters">
+    <span class="pill on" data-s="0">전체</span>
+    <span class="pill" data-s="1">1과목</span>
+    <span class="pill" data-s="2">2과목</span>
+  </div>
+  <input class="search" id="q" type="search" placeholder="검색 (예: DIKW, 트랜잭션)">
+  <div id="list"></div>
+</section>
+
+<!-- 플래시카드 -->
+<section class="view" id="v-flash">
+  <div class="statgrid">
+    <div class="stat"><div class="n" id="s-due">0</div><div class="l">오늘 복습</div></div>
+    <div class="stat"><div class="n" id="s-new">0</div><div class="l">새 카드</div></div>
+    <div class="stat"><div class="n" id="s-done">0</div><div class="l">마스터(Box4+)</div></div>
+  </div>
+  <div id="flash-area"></div>
+</section>
+
+<!-- 퀴즈 -->
+<section class="view" id="v-quiz">
+  <div id="quiz-area"></div>
+</section>
+</div>
+
+<div class="tabs">
+  <button class="on" data-v="review"><span class="ic">📖</span>개념 리뷰</button>
+  <button data-v="flash"><span class="ic">🃏</span>플래시카드</button>
+  <button data-v="quiz"><span class="ic">✅</span>퀴즈</button>
+</div>
+
+<script>
+const DATA = [
+{id:"d1", s:1, t:"데이터와 정보의 차이", b:"데이터가 의미를 담고 있으면 <b>정보</b>가 되지만, 의미가 없다면 그냥 자료로 남는다."},
+{id:"d2", s:1, t:"암묵지와 형식지의 상호작용", b:"<ul><li><b>내면화</b>(암묵지): 개인의 경험·지식을 요령이나 노하우로 고도화</li><li><b>공통화</b>(암묵지): 다른 개인·집단과 공통적 지식을 생성</li><li><b>표출화</b>(형식지): 경험·지식을 책이나 문서 등 외부로 표출</li><li><b>연결화</b>(형식지): 개인의 경험과 외부의 지식을 연결</li></ul>"},
+{id:"d3", s:1, t:"DIKW 피라미드", b:"<ul><li><b>데이터</b>: 객관적인 사실</li><li><b>정보</b>: 데이터에서 도출된 의미</li><li><b>지식</b>: 정보 구조화·분류 → 개인 경험과 결합 → 고유의 지식으로 내재화</li><li><b>지혜</b>: 지식의 축적과 아이디어가 결합된 창의적 산물</li></ul>"},
+{id:"d4", s:1, t:"데이터 크기 단위 순서 (TPEZY, 티페지)", b:"<b>테라</b>바이트 → <b>페타</b>바이트 → <b>엑사</b>바이트 → <b>제타</b>바이트 → <b>요타</b>바이트"},
+{id:"d5", s:1, t:"데이터의 일반적인 특징", b:"<ul><li><b>통합된</b> 데이터: 동일 내용의 데이터 중복 X</li><li><b>저장된</b> 데이터: 컴퓨터 매체가 접근 가능한 저장 매체에 저장</li><li><b>공용</b> 데이터: 여러 사용자가 공유 가능</li><li><b>변화하는</b> 데이터: 삽입·수정·삭제로 항상 최신 유지</li></ul>"},
+{id:"d6", s:1, t:"데이터베이스의 다양한 측면에서의 특성", b:"<ul><li><b>정보의 축적·전달</b>: 기계 가독성, 검색 가능성, 원격 조작성</li><li><b>정보 이용</b>: 다양한 정보를 신속하고 경제적으로 검색</li><li><b>정보 관리</b>: 체계적 축적·추가·갱신</li><li><b>정보기술 발전</b>: 네트워크 기술 발전을 견인</li><li><b>경제·산업</b>: 효율성 제고, 국민 편의 증진</li></ul>"},
+{id:"d7", s:1, t:"KMS", b:"<b>지식 경영 시스템</b>: 기업이 보유한 모든 지식을 통합해 문제 해결 능력을 향상시키는 것이 목적"},
+{id:"d8", s:1, t:"SCM", b:"<b>공급망 관리</b>: 유통 단계를 최적화해서 고객에게 제공하는 것이 목적"},
+{id:"d9", s:1, t:"CRM", b:"<b>고객 관계 관리</b>: 신규 고객 창출 혹은 기존 고객 이탈 방지"},
+{id:"d10", s:1, t:"부문별 사회 기반 구조 데이터베이스", b:"물류 · 지리 · 교통 · 의료 · 교육 부문"},
+{id:"d11", s:1, t:"메타데이터", b:"데이터를 설명하는 데이터<br>예: 사진 파일이 언제, 어디서 생성되었는지 알려주는 추가 데이터"},
+{id:"d12", s:1, t:"인덱스", b:"데이터베이스에서 데이터를 저장할 때 내부에서 자동으로 지정되는 데이터의 이름"},
+{id:"d13", s:1, t:"데이터 웨어하우스", b:"분산 환경에 흩어진 데이터들을 <b>총체적인 관점에서</b> 의사결정을 위해 공통의 형식으로 변환해 관리하는 역할"},
+{id:"d14", s:1, t:"데이터 마트", b:"데이터 웨어하우스로부터 추출된 작은 데이터베이스. <b>특정 목표</b> 달성에 필요한 데이터를 제공"},
+{id:"d15", s:1, t:"3V (더그 래니)", b:"<b>Volume</b>(양) · <b>Variety</b>(유형) · <b>Velocity</b>(속도)"},
+{id:"d16", s:1, t:"4V", b:"3V + <b>Value(가치)</b>"},
+{id:"d17", s:1, t:"빅데이터의 기능 (비유)", b:"산업혁명의 <b>석탄과 철</b> · <b>21세기 원유</b> · <b>렌즈</b> · <b>플랫폼</b>"},
+{id:"d18", s:1, t:"빅데이터로 인한 변화 (후·전·양·상)", b:"<ul><li>사전처리 → 사<b>후</b>처리</li><li>표본조사 → <b>전</b>수조사</li><li>질 → <b>양</b></li><li>인과관계 → <b>상</b>관관계</li></ul>"},
+{id:"d19", s:1, t:"트랜잭션의 4가지 특성 (ACID)", b:"트랜잭션 = DB에서 명령을 수행하는 하나의 논리적 기능 단위<ul><li><b>원자성</b>: 모두 적용되거나 모두 적용되지 않아야 함</li><li><b>일관성</b>: 결과는 항상 일관성을 띠어야 함</li><li><b>고립성</b>: 다른 트랜잭션에 영향을 주지 않아야 함</li><li><b>지속성</b>: 성공 시 결과는 영구적이어야 함</li></ul>"},
+{id:"d20", s:1, t:"7가지 빅데이터 활용 기본 테크닉", b:"연관 규칙 학습 · 유형분석 · 유전 알고리즘 · 기계학습 · 회귀분석 · 감정분석 · 소셜 네트워크 분석"},
+{id:"d21", s:1, t:"유전 알고리즘", b:"최적화 문제의 해결책을 자연선택·돌연변이 등의 메커니즘으로 점진적으로 진화<br>예: 최적화된 택배 차량 배치, 최고 시청률 방송 편성, 응급실 의사 배치, 연비 좋은 자동차 개발"},
+{id:"d22", s:1, t:"기계학습 (머신러닝)", b:"하나의 분석 방법이라기보다, 다양한 분석 알고리즘을 이용해 예측하는 분석모델을 아우르는 넓은 개념"},
+{id:"d23", s:1, t:"빅데이터 위기 요인과 통제 방안", b:"<ul><li>사생활 침해 → <b>동의에서 책임으로</b></li><li>책임 원칙 훼손 → <b>결과 기반 책임 원칙 고수</b></li><li>데이터 오용 → <b>알고리즘 접근 허용</b></li></ul>"},
+{id:"d24", s:1, t:"개인정보 비식별 기술 5가지", b:"<ul><li><b>데이터 마스킹</b>: 플레이 데이터 → *** 데이터</li><li><b>가명 처리</b>: 홍길동 → 임꺽정</li><li><b>총계 처리</b>: 70·80·90점 → 평균 80점</li><li><b>데이터 값 삭제</b>: 서울시 서초구 → 서울시</li><li><b>데이터 범주화</b>: 수학 80점 → 수학 70~90점</li></ul>"},
+{id:"d25", s:1, t:"데이터 사이언티스트의 요구 역량", b:"<ul><li><b>하드스킬</b>: 빅데이터 이론적 지식, 분석 기술 숙련</li><li><b>소프트스킬</b>: 통찰력 있는 분석, 설득력 있는 전달, 다분야 간 협력</li></ul>"},
+{id:"d26", s:1, t:"가치 패러다임의 변화", b:"<b>디지털화 → 연결 → 에이전시</b><ul><li>디지털화: 운영체제, 워드, 파워포인트</li><li>연결: 구글 검색 알고리즘, 네이버 컨텐츠</li><li>에이전시: 사물인터넷, 복잡한 연결의 신뢰성 있는 관리·제어</li></ul>"},
+{id:"d27", s:1, t:"하둡 에코시스템", b:"하둡을 비롯한 다양한 기술·프레임워크·개발언어·솔루션으로 이루어진 거대한 프로젝트의 집합체 (다양한 빅데이터 기술이 집합된 결정체)"},
+{id:"d28", s:1, t:"데이터 레이크", b:"정형·비정형을 막론한 다양한 형태의 Raw Data를 모은 집합소. 다양한 툴로 가공·분석해 인사이트를 얻기에 유용"},
+{id:"d29", s:2, t:"분석 대상·방법에 따른 4가지 분석 주제", b:"<ul><li><b>최적화</b>: 대상 Known, 방법 Known</li><li><b>솔루션</b>: 대상 Known, 방법 Unknown</li><li><b>통찰</b>: 대상 Unknown, 방법 Known</li><li><b>발견</b>: 대상 Unknown, 방법 Unknown</li></ul>"},
+{id:"d30", s:2, t:"분석 기획 시 고려사항", b:"가용 데이터 고려 · 적절한 활용 방안과 유스케이스 탐색 · 장애요소에 대한 사전 계획 수립"},
+{id:"d31", s:2, t:"KDD 분석 방법론", b:"<b>분석가의 관점</b><ol><li>데이터셋 선택</li><li>데이터 전처리</li><li>데이터 변환</li><li>데이터 마이닝</li><li>데이터 마이닝 결과 평가</li></ol>"},
+{id:"d32", s:2, t:"CRISP-DM 분석 방법론", b:"<b>기획자의 관점</b><ol><li>업무의 이해</li><li>데이터 이해</li><li>데이터 준비</li><li>모델링</li><li>평가</li><li>전개</li></ol>"},
+{id:"d33", s:2, t:"빅데이터 분석 방법론 5단계", b:"<ol><li><b>분석 기획</b>: 비즈니스 이해·범위 설정, 프로젝트 정의·계획, 위험 계획</li><li><b>데이터 준비</b>: 필요 데이터 정의, 데이터 스토어 설계, 수집·정합성 검정</li><li><b>데이터 분석</b>: 분석용 데이터 준비, 텍스트·탐색적 분석, 모델링, 평가·검증, 적용</li><li><b>시스템 구현</b>: 설계·구현, 테스트·운영</li><li><b>평가 및 전개</b>: 모델 발전계획, 프로젝트 평가·보고</li></ol>"},
+{id:"d34", s:2, t:"분석 과제 탐색: 하향식 vs 상향식", b:"<ul><li><b>하향식</b>: 문제가 주어졌을 때 해결 과제를 찾는 방법 (최적화, 솔루션)</li><li><b>상향식</b>: 다양한 데이터 조합 속에서 인사이트를 찾는 방법 (통찰, 발견)</li></ul>"},
+{id:"d35", s:2, t:"분석 과제 발굴 방법론 개념도", b:"\"분석 대상이 무엇인지 알고 있는가?\"<ul><li><b>Yes → 하향식</b>: ① 문제 탐색 ② 문제 정의 ③ 해결 방안 탐색 ④ 타당성 검토</li><li><b>No → 상향식</b>: ① 지도학습·비지도학습 ② 프로토타입(시행착오 해결법)</li></ul>"},
+{id:"d36", s:2, t:"하향식 — 문제 탐색 단계", b:"<ol><li><b>비즈니스 모델 탐색 기법</b>: 캔버스 9 Block을 <b>5가지로 단순화</b> — 규제와 감사, 업무, 제품, 고객, 지원 인프라</li><li><b>분석 기회 발굴 범위의 확장</b>: 거시적 관점, 경쟁자 확대 관점, 시장의 니즈 탐색, 역량의 재해석</li></ol>"},
+{id:"d37", s:2, t:"하향식 — 해결 방안 탐색 단계", b:"<ul><li>기존 시스템 가능 + 역량 O → <b>기존 시스템·인력으로 수행</b></li><li>기존 시스템 가능 + 역량 X → <b>역량 확보 (교육·채용)</b></li><li>기존 시스템 불가 + 역량 O → <b>시스템 고도화</b></li><li>기존 시스템 불가 + 역량 X → <b>전문업체 아웃소싱</b></li></ul>"},
+{id:"d38", s:2, t:"지도 학습", b:"정답(레이블)이 있는 데이터를 활용하여 분석 모델을 학습"}
+];
+
+const LS = "adsp-srs-v1";
+const state = JSON.parse(localStorage.getItem(LS) || "{}");
+const save = () => localStorage.setItem(LS, JSON.stringify(state));
+const today = () => new Date().toISOString().slice(0,10);
+const addDays = d => { const t = new Date(); t.setDate(t.getDate()+d); return t.toISOString().slice(0,10); };
+const INTERVAL = {1:1, 2:2, 3:4, 4:7, 5:15};
+const get = id => state[id] || {box:0, due:today()};
+
+document.getElementById("hdr").textContent = "총 " + DATA.length + "개 개념";
+
+// 탭
+document.querySelectorAll(".tabs button").forEach(b => b.onclick = () => {
+  document.querySelectorAll(".tabs button").forEach(x => x.classList.remove("on"));
+  document.querySelectorAll(".view").forEach(x => x.classList.remove("on"));
+  b.classList.add("on");
+  document.getElementById("v-" + b.dataset.v).classList.add("on");
+  if (b.dataset.v === "flash") initFlash();
+  if (b.dataset.v === "quiz") initQuiz();
+});
+
+// ---------- 개념 리뷰 ----------
+let subj = 0;
+document.querySelectorAll("#filters .pill").forEach(p => p.onclick = () => {
+  document.querySelectorAll("#filters .pill").forEach(x => x.classList.remove("on"));
+  p.classList.add("on"); subj = +p.dataset.s; renderList();
+});
+document.getElementById("q").oninput = renderList;
+function renderList(){
+  const q = document.getElementById("q").value.trim().toLowerCase();
+  const el = document.getElementById("list");
+  el.innerHTML = "";
+  DATA.filter(c => (!subj || c.s === subj) &&
+    (!q || c.t.toLowerCase().includes(q) || c.b.toLowerCase().includes(q)))
+  .forEach(c => {
+    const d = document.createElement("div");
+    d.className = "concept";
+    d.innerHTML = `<h3>${c.t}<em>${c.s}과목</em></h3><div class="body">${c.b}</div>`;
+    d.onclick = () => d.classList.toggle("open");
+    el.appendChild(d);
+  });
+  if (!el.children.length) el.innerHTML = '<p style="text-align:center;color:var(--sub)">검색 결과 없음</p>';
+}
+renderList();
+
+// ---------- 플래시카드 (라이트너 SRS) ----------
+let queue = [], cur = null;
+function dueCards(){ return DATA.filter(c => get(c.id).due <= today()); }
+function updateStats(){
+  document.getElementById("s-due").textContent = dueCards().length;
+  document.getElementById("s-new").textContent = DATA.filter(c => get(c.id).box === 0).length;
+  document.getElementById("s-done").textContent = DATA.filter(c => get(c.id).box >= 4).length;
+}
+function initFlash(){
+  updateStats();
+  queue = dueCards().sort((a,b) => get(a.id).box - get(b.id).box || Math.random()-0.5);
+  nextCard();
+}
+function nextCard(){
+  const area = document.getElementById("flash-area");
+  updateStats();
+  if (!queue.length){
+    area.innerHTML = `<div class="done"><div class="big">🎉</div><p style="margin:0">오늘 복습 끝!<br><span style="font-size:13px;color:var(--sub)">내일 다시 확인해봐요. 미리 더 볼 수도 있어요.</span></p><button class="btn" id="more">전체 카드 한 번 더 돌기</button></div>`;
+    document.getElementById("more").onclick = () => {
+      queue = [...DATA].sort(() => Math.random()-0.5); nextCard();
+    };
+    return;
+  }
+  cur = queue.shift();
+  const st = get(cur.id);
+  area.innerHTML = `
+    <div class="fcard" id="fc">
+      <div class="tag">${cur.s}과목 · Box ${st.box} · 남은 카드 ${queue.length + 1}</div>
+      <div class="front">${cur.t}</div>
+      <div class="back">${cur.b}</div>
+    </div>
+    <p class="hint" id="fh">카드를 탭해서 답 확인</p>
+    <div class="grade" id="gr">
+      <button class="g-no">몰라요</button>
+      <button class="g-mid">애매해요</button>
+      <button class="g-yes">알아요</button>
+    </div>`;
+  const fc = document.getElementById("fc");
+  fc.onclick = () => {
+    fc.classList.add("flip");
+    document.getElementById("gr").classList.add("on");
+    document.getElementById("fh").style.display = "none";
+  };
+  document.querySelector(".g-no").onclick = () => grade(0);
+  document.querySelector(".g-mid").onclick = () => grade(1);
+  document.querySelector(".g-yes").onclick = () => grade(2);
+}
+function grade(g){
+  const st = get(cur.id);
+  if (g === 0){ st.box = 1; st.due = today(); queue.push(cur); }
+  else if (g === 1){ st.box = Math.max(1, st.box); st.due = addDays(1); }
+  else { st.box = Math.min(5, st.box + 1); st.due = addDays(INTERVAL[st.box]); }
+  state[cur.id] = st; save(); nextCard();
+}
+
+// ---------- 퀴즈 ----------
+let qz = [], qi = 0, qscore = 0;
+function initQuiz(){
+  qz = [...DATA].sort(() => Math.random()-0.5).slice(0, 10);
+  qi = 0; qscore = 0; renderQuiz();
+}
+function renderQuiz(){
+  const area = document.getElementById("quiz-area");
+  if (qi >= qz.length){
+    area.innerHTML = `<div class="done"><div class="big">${qscore >= 8 ? "🏆" : qscore >= 5 ? "👍" : "💪"}</div><p style="margin:0;font-size:20px;font-weight:700">${qscore} / ${qz.length}</p><p style="font-size:13px;color:var(--sub)">${qscore >= 8 ? "합격권이에요!" : "틀린 개념은 플래시카드로 복습!"}</p><button class="btn" onclick="initQuiz()">다시 풀기</button></div>`;
+    return;
+  }
+  const c = qz[qi];
+  const wrongs = DATA.filter(x => x.id !== c.id && x.s === c.s).sort(() => Math.random()-0.5).slice(0,3);
+  const opts = [c, ...wrongs].sort(() => Math.random()-0.5);
+  area.innerHTML = `
+    <div class="prog"><i style="width:${qi/qz.length*100}%"></i></div>
+    <div class="qbox">
+      <div class="qn">${qi+1} / ${qz.length} · ${c.s}과목</div>
+      <div class="qt">다음 설명에 해당하는 개념은?<div style="margin-top:10px;padding:12px;background:var(--bg);border-radius:10px;font-size:14px">${c.b}</div></div>
+      ${opts.map(o => `<button class="opt" data-id="${o.id}">${o.t}</button>`).join("")}
+    </div>`;
+  document.querySelectorAll(".opt").forEach(btn => btn.onclick = () => {
+    const ok = btn.dataset.id === c.id;
+    if (ok) qscore++;
+    document.querySelectorAll(".opt").forEach(b => {
+      b.disabled = true;
+      if (b.dataset.id === c.id) b.classList.add("correct");
+      else if (b === btn && !ok) b.classList.add("wrong");
+    });
+    setTimeout(() => { qi++; renderQuiz(); }, ok ? 700 : 1600);
+  });
+}
+</script>
+</body>
+</html>
